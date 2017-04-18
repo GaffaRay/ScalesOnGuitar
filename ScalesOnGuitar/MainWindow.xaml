@@ -1,0 +1,39 @@
+﻿<Window x:Class="ScalesOnGuitar.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ScalesOnGuitar"
+        mc:Ignorable="d"
+        Title="Scales on Guitar" Height="350" Width="525" ResizeMode="NoResize">
+    <Grid x:Name="GridApplication">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="18"/>
+            <RowDefinition x:Name="rowFretBoard" Height="200"/>
+            <RowDefinition Height="132"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition x:Name="columnWidth" Width="525"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.RowSpan="1">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem x:Name="mInstrumentType" Header="_Instrument">
+                    <MenuItem x:Name="mIGuitarSix"  IsCheckable="True" Click="mISixGuitar_Click" IsChecked="True"/>
+                    <MenuItem x:Name="mIGuitarSeven"  IsCheckable="True" Click="mIGuitarSeven_Click"/>
+                    <Separator/>
+                    <MenuItem x:Name="mIBassFour" IsCheckable="True" Click="mIBassFour_Click"/>
+                    <MenuItem x:Name="mIBassFive" IsCheckable="True" Click="mIBassFive_Click"/>
+                    <MenuItem x:Name="mIBassSix" IsCheckable="True" Click="mIBassSix_Click"/>
+                </MenuItem>
+                <MenuItem x:Name="mTune" Header="_Tune">
+                    <MenuItem x:Name="mTStandard" Header="Standard" IsCheckable="True" IsChecked="True" Click="mTStandard_Click"/>
+                    <MenuItem x:Name="mTDropD" Header="Drop D" IsCheckable="True" Click="mTDropD_Click"/>
+                </MenuItem>
+            </Menu>
+        </DockPanel>
+        <Label x:Name="label" Content="Label" HorizontalAlignment="Left" Margin="276,41,0,0" VerticalAlignment="Top" Grid.Row="2"/>
+        <ComboBox x:Name="CBToneMode" HorizontalAlignment="Left" Margin="136,44,0,0" VerticalAlignment="Top" Width="102" Grid.Row="2" SelectedIndex="0"/>
+        <Button x:Name="button" HorizontalAlignment="Left" Margin="354,44,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" Height="22" Click="button_Click"/>
+        <ComboBox x:Name="CBBaseNote" HorizontalAlignment="Left" Margin="32,44,0,0" Grid.Row="2" VerticalAlignment="Top" Width="58" SelectedIndex="0"/>
+    </Grid>
+</Window>
