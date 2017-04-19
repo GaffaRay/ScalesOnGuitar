@@ -15,65 +15,75 @@ namespace ScalesOnGuitar
 
     class Instrument
     {
-        public InstrumentType instrumentType;
-        public int numberOfStrings;
-        public TuningType tuning;
+        public InstrumentType InstrumentType;
+        public int NumberOfStrings;
+        public TuningType Tuning;
 
-        public List<String> stringsOfInstrument = new List<String>();
+        public List<String> StringsOfInstrument = new List<String>();
 
-        public Instrument(InstrumentType type, int _numberOfStrings, TuningType _tuning)
+        public Instrument(InstrumentType type, int numberOfStrings, TuningType tuning)
         {
-            instrumentType = type;
-            numberOfStrings = _numberOfStrings;
-            tuning = _tuning;
+            InstrumentType = type;
+            NumberOfStrings = numberOfStrings;
+            Tuning = tuning;
 
-            switch (instrumentType)
+            switch (InstrumentType)
             {
                 case InstrumentType.Guitar:
-                    switch (numberOfStrings)
+                    switch (NumberOfStrings)
                     {
                         case 6:
-                            stringsOfInstrument.Add(new String(AllBaseNotes.E));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.A));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.D));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.G));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.H));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.E));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.E));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.A));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.D));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.G));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.H));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.E));
                             break;
                         case 7:
-                            stringsOfInstrument.Add(new String(AllBaseNotes.H));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.H));
                             goto case 6;
                     }
                     break;
                 case InstrumentType.Bass:
-                    switch (numberOfStrings)
+                    switch (NumberOfStrings)
                     {
                         case 4:
-                            stringsOfInstrument.Add(new String(AllBaseNotes.E));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.A));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.D));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.G));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.E));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.A));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.D));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.G));
                             break;
                         case 5:
-                            stringsOfInstrument.Add(new String(AllBaseNotes.H));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.H));
                             goto case 4;
                         case 6:
-                            stringsOfInstrument.Add(new String(AllBaseNotes.H));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.E));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.A));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.D));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.G));
-                            stringsOfInstrument.Add(new String(AllBaseNotes.C));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.H));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.E));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.A));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.D));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.G));
+                            StringsOfInstrument.Add(new String(AllBaseNotes.C));
                             break;
                     }
                     break;
             }
+
+            switch (tuning)
+            {
+                    case TuningType.DropD:
+                        StringsOfInstrument[0] = new String(AllBaseNotes.D);
+                        break;
+                    case TuningType.Standard:
+                        break;
+            }
+
         }
 
-        public Instrument(InstrumentType _type, int _numberOfStrings)
+        public Instrument(InstrumentType type, int numberOfStrings)
         {
-            instrumentType = _type;
-            numberOfStrings = _numberOfStrings;
+            InstrumentType = type;
+            NumberOfStrings = numberOfStrings;
         }
     }
 }

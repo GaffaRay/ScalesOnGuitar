@@ -30,16 +30,12 @@ namespace ScalesOnGuitar
             InitializeToneModeCBox();
             InitializeBaseNoteCBox();
 
-
-            createFretBoard();
-
-            String s = new String(AllBaseNotes.A);
-            label.Content = s.GetNoteFromString(1);
+            CreateFretBoard();
         }
 
         private void InitializeToneModeCBox()
         {
-            string[] interimsArray = dicToneMode.Keys.ToArray();
+            string[] interimsArray = _dicToneMode.Keys.ToArray();
 
             for (int i = 0; i < interimsArray.Length; i++)
             {
@@ -49,19 +45,19 @@ namespace ScalesOnGuitar
 
         private void InitializeBaseNoteCBox()
         {
-            for (int i = 0; i < StartNotes.Length; i++)
+            for (int i = 0; i < _startNotes.Length; i++)
             {
-                CBBaseNote.Items.Add(StartNotes[i]);
+                CBBaseNote.Items.Add(_startNotes[i]);
             }
             
         }
 
         private void InitializeInstrumentMenu()
         {
-            var interimsList = dicInstruments.Keys.ToList();
-            mIGuitarSix.Header = interimsList[0].ToString();
+            var interimsList = _dicInstruments.Keys.ToList();
+            mIGuitarSix.Header = interimsList[0];
             mIGuitarSeven.Header = interimsList[1];
-            mIBassFour.Header = interimsList[2].ToString();
+            mIBassFour.Header = interimsList[2];
             mIBassFive.Header = interimsList[3];
             mIBassSix.Header = interimsList[4];
         }
@@ -71,8 +67,9 @@ namespace ScalesOnGuitar
             mTStandard.Header = Tuning.GetDicTuningsKey(0);
             mTDropD.Header = Tuning.GetDicTuningsKey(1);
         }
+        
 
-        private void createFretBoard()
+        private void CreateFretBoard()
         {
             InstrumentType type = InstrumentType.Guitar;
             int numberOfStrings = 6;
@@ -87,14 +84,14 @@ namespace ScalesOnGuitar
                     MenuItem item = (MenuItem)mInstrumentType.Items[i];
                     if (item.IsChecked == true)
                     {
-                        type = dicInstruments[item.Header.ToString()].instrumentType;
-                        numberOfStrings = dicInstruments[item.Header.ToString()].numberOfStrings;
+                        type = _dicInstruments[item.Header.ToString()].InstrumentType;
+                        numberOfStrings = _dicInstruments[item.Header.ToString()].NumberOfStrings;
                         break;
                     }
                 }
                 catch
                 {
-
+                    // ignored
                 }
             }
 
@@ -108,79 +105,73 @@ namespace ScalesOnGuitar
                         tuning = Tuning.GetDicTuningsValue(item.Header.ToString());
                     }
                 }
-                catch 
+                catch
                 {
-
+                    // ignored
                 }
             }
 
             Instrument firstInstrument = new Instrument(type, numberOfStrings, tuning);
-            Scale scale = new Scale(CBBaseNote.SelectedItem.ToString(), dicToneMode[CBToneMode.SelectedItem.ToString()]);
+            Scale scale = new Scale(CBBaseNote.SelectedItem.ToString(), _dicToneMode[CBToneMode.SelectedItem.ToString()]);
 
-            for (int i = 0; i < labelList.Count; i++)
+            for (int i = 0; i < _labelList.Count; i++)
             {
-                GridApplication.Children.Remove(labelList[i]);
+                GridApplication.Children.Remove(_labelList[i]);
             }
 
-            
-
-            int numberofstrings = firstInstrument.numberOfStrings;
+            int numberofstrings = firstInstrument.NumberOfStrings;
             int wantedRows = numberofstrings + 1;
             int numberoffrets = 15;
             int wantedColumns = numberoffrets + 1;
 
             int[] fretMarkers = { 3, 5, 7, 9, 12, 15, 17 };
 
-            double heightOfFretBoard = 200; // Versuchen die Höhe durch eine Funktion zu bekommen
-            double heightOfSingleFret = heightOfFretBoard / wantedRows;
+            double heightOfFretBoard = 170; //200; // Versuchen die Höhe durch eine Funktion zu bekommen
+            double heightOfSingleFret = heightOfFretBoard / numberOfStrings; //wantedRows;
             double widhtOfFretBoard = 507; // Versuchen die Breite durch eine Funktion zu bekommen
             double widthOfSingleFret = widhtOfFretBoard / wantedColumns;
 
             for (int i = 0; i < wantedRows; i++)
             {
-                //iterateString = firstInstrument.stringsOfInstrument[i];
+               for (int j = 0; j < wantedColumns; j++)
+               {
+                   Label b = new Label {BorderBrush = Brushes.Black};
 
-
-                for (int j = 0; j < wantedColumns; j++)
-                {
-                    Label b = new Label();
-                    //String s = new String(AllBaseNotes.A);
-
-
-
-                    //b.Content = s.GetNoteFromString(j);
-                    if (i < wantedColumns - 1)
+                   if (i < wantedColumns - 1)
                     {
                         try
                         {
-                            if (scale.wantedScale.Contains(firstInstrument.stringsOfInstrument[i].GetNoteFromString(j)))
+                            if (scale.wantedScale.Contains(firstInstrument.StringsOfInstrument[i].GetNoteFromString(j)))
                             {
-                                b.Content = firstInstrument.stringsOfInstrument[i].GetNoteFromString(j);
+                                b.Content = firstInstrument.StringsOfInstrument[i].GetNoteFromString(j);
+                                b.Background = Brushes.DarkGray;
+
                             }
                             else
                             {
-                                b.Content = "";
+                                b.Content = ""; 
+                                b.Background = Brushes.Transparent;  //(SolidColorBrush)new BrushConverter().ConvertFromString("#0306FF");
                             }
 
-                            //b.Content = firstInstrument.stringsOfInstrument[i].GetNoteFromString(j);
+                            b.BorderThickness = j == 0 ? new Thickness(0, 0, 3, 1) : new Thickness(0, 0, 1, 1);
                         }
-                        catch 
+                        catch
                         {
-
+                            // ignored
                         }
-                        //b.Content = firstInstrument.stringsOfInstrument[i].GetNoteFromString(j);
                     }
                     
 
                     b.Height = heightOfSingleFret;
                     b.Width = widthOfSingleFret;
                     b.HorizontalContentAlignment = HorizontalAlignment.Center;
-                    b.Background = System.Windows.Media.Brushes.Blue;
 
                     if (i == numberofstrings)
                     {
                         b.Content = "";
                         b.Background = System.Windows.Media.Brushes.Transparent;
+                        b.BorderThickness = new Thickness(0, 0, 0, 1);
+                        b.Height = 30;
                     }
 
                     if (i == numberofstrings && fretMarkers.Contains(j))
@@ -201,226 +192,17 @@ namespace ScalesOnGuitar
                     Grid.SetRow(b, 1);
                     GridApplication.Children.Add(b);
 
-                    labelList.Add(b);
+                    _labelList.Add(b);
                 }
             }
 
         }
 
-        //private void createFretBoard()
-        //{
-        //    int numberofstrings = 6;
-        //    int wantedRows = numberofstrings + 1;
-        //    int numberoffrets = 15;
-        //    int wantedColumns = numberoffrets + 1;
+        List<Label> _labelList = new List<Label>();
 
-        //    int[] fretMarkers = { 3, 5, 7, 9, 12, 15, 17 };
+        public static string[] AllInstruments = {"Guitar", "Bass"};
 
-        //    double heightOfFretBoard = 200; // Versuchen die Höhe durch eine Funktion zu bekommen
-        //    double heightOfSingleFret = heightOfFretBoard / wantedRows;
-        //    double widhtOfFretBoard = 507; // Versuchen die Breite durch eine Funktion zu bekommen
-        //    double widthOfSingleFret = widhtOfFretBoard / wantedColumns;
-
-        //    for (int i = 0; i < wantedRows; i++)
-        //    {
-        //        for (int j = 0; j < wantedColumns; j++)
-        //        {
-        //            Label b = new Label();
-
-        //            b.Content = "Cis";
-        //            b.Height = heightOfSingleFret;
-        //            b.Width = widthOfSingleFret;
-        //            b.HorizontalContentAlignment = HorizontalAlignment.Center;
-        //            b.Background = System.Windows.Media.Brushes.Blue;
-
-        //            if (i == numberofstrings)
-        //            {
-        //                b.Content = "";
-        //                b.Background = System.Windows.Media.Brushes.Transparent;
-        //            }
-
-        //            if (i == numberofstrings && fretMarkers.Contains(j))
-        //            {
-        //                b.Content = j;
-        //            }
-
-        //            b.VerticalAlignment = VerticalAlignment.Bottom;
-        //            b.HorizontalAlignment = HorizontalAlignment.Left;
-
-        //            b.HorizontalContentAlignment = HorizontalAlignment.Right;
-
-        //            Thickness margin = b.Margin;
-        //            margin.Left = widthOfSingleFret * j;
-        //            margin.Bottom = heightOfSingleFret * i;
-        //            b.Margin = margin;
-
-        //            Grid.SetRow(b, 1);
-        //            GridApplication.Children.Add(b);
-        //        }
-        //    }
-        //}
-
-
-        List<Label> labelList = new List<Label>();
-
-
-
-        //public void createFretBoard(int number)
-        //{
-        //    int numberofstrings = number;
-        //    int wantedRows = numberofstrings + 1;
-        //    int numberoffrets = 15;
-        //    int wantedColumns = numberoffrets + 1;
-
-        //    int[] fretMarkers = { 3, 5, 7, 9, 12, 15, 17 };
-
-        //    double heightOfFretBoard = 200; // Versuchen die Höhe durch eine Funktion zu bekommen
-        //    double heightOfSingleFret = heightOfFretBoard / wantedRows;
-        //    double widhtOfFretBoard = 507; // Versuchen die Breite durch eine Funktion zu bekommen
-        //    double widthOfSingleFret = widhtOfFretBoard / wantedColumns;
-
-        //    for (int i = 0; i < wantedRows; i++)
-        //    {
-        //        for (int j = 0; j < wantedColumns; j++)
-        //        {
-        //            Label b = new Label();
-        //            String s = new String(AllBaseNotes.A);
-
-        //            b.Content = s.GetNoteFromString(j);
-
-        //            b.Height = heightOfSingleFret;
-        //            b.Width = widthOfSingleFret;
-        //            b.HorizontalContentAlignment = HorizontalAlignment.Center;
-        //            b.Background = System.Windows.Media.Brushes.Blue;
-
-        //            if (i == numberofstrings)
-        //            {
-        //                b.Content = "";
-        //                b.Background = System.Windows.Media.Brushes.Transparent;
-        //            }
-
-        //            if (i == numberofstrings && fretMarkers.Contains(j))
-        //            {
-        //                b.Content = j;
-        //            }
-
-        //            b.VerticalAlignment = VerticalAlignment.Bottom;
-        //            b.HorizontalAlignment = HorizontalAlignment.Left;
-
-        //            b.HorizontalContentAlignment = HorizontalAlignment.Right;
-
-        //            Thickness margin = b.Margin;
-        //            margin.Left = widthOfSingleFret * j;
-        //            margin.Bottom = heightOfSingleFret * i;
-        //            b.Margin = margin;
-
-        //            Grid.SetRow(b, 1);
-        //            GridApplication.Children.Add(b);
-
-        //            labelList.Add(b);
-        //        }
-        //    }
-        //}
-
-        //public void createFretBoard(int number)
-        //{
-        //    int numberofstrings = number;
-        //    int wantedRows = numberofstrings + 1;
-        //    int numberoffrets = 15;
-        //    int wantedColumns = numberoffrets + 1;
-
-        //    int[] fretMarkers = { 3, 5, 7, 9, 12, 15, 17 };
-
-        //    double heightOfFretBoard = 200; // Versuchen die Höhe durch eine Funktion zu bekommen
-        //    double heightOfSingleFret = heightOfFretBoard / wantedRows;
-        //    double widhtOfFretBoard = 507; // Versuchen die Breite durch eine Funktion zu bekommen
-        //    double widthOfSingleFret = widhtOfFretBoard / wantedColumns;
-
-        //    for (int i = 0; i < wantedRows; i++)
-        //    {
-        //        for (int j = 0; j < wantedColumns; j++)
-        //        {
-        //            Label b = new Label();
-        //            String s = new String(AllBaseNotes.A);
-
-        //            b.Content = s.GetNoteFromString(j);
-
-        //            b.Height = heightOfSingleFret;
-        //            b.Width = widthOfSingleFret;
-        //            b.HorizontalContentAlignment = HorizontalAlignment.Center;
-        //            b.Background = System.Windows.Media.Brushes.Blue;
-
-        //            if (i == numberofstrings)
-        //            {
-        //                b.Content = "";
-        //                b.Background = System.Windows.Media.Brushes.Transparent;
-        //            }
-
-        //            if (i == numberofstrings && fretMarkers.Contains(j))
-        //            {
-        //                b.Content = j;
-        //            }
-
-        //            b.VerticalAlignment = VerticalAlignment.Bottom;
-        //            b.HorizontalAlignment = HorizontalAlignment.Left;
-
-        //            b.HorizontalContentAlignment = HorizontalAlignment.Right;
-
-        //            Thickness margin = b.Margin;
-        //            margin.Left = widthOfSingleFret * j;
-        //            margin.Bottom = heightOfSingleFret * i;
-        //            b.Margin = margin;
-
-        //            Grid.SetRow(b, 1);
-        //            GridApplication.Children.Add(b);
-
-        //            labelList.Add(b);
-        //        }
-        //    }
-        //}
-
-        public static string[] AllInstruments = { "Guitar", "Bass" };
-
-        private void InitializeCBToneMode()
-        {
-            //CBToneMode.ItemsSource = Enum.GetValues(typeof(ToneMode));
-            //CBToneMode.SelectedIndex = 0;
-        }
-
-        private void signLabel()
-        {
-            var blubb = mTune.Items;
-
-            foreach (MenuItem item in blubb)
-            {
-                if(item.IsChecked == true)
-                {
-                    label.Content = item.Header;
-                }
-            }
-        }
-
-        private void signLabelTwo()
-        {
-            foreach (MenuItem item in mInstrumentType.Items)
-            {
-                if (item.IsChecked == true)
-                {
-                    string s = Convert.ToString(item.Header);
-                    label.Content = dicInstruments[s].instrumentType;
-                    break;
-                }
-            }
-        }
-
-        //private  Dictionary<string, TuningType> dicTunings = new Dictionary<string, TuningType>()
-        //    {
-        //        { "Standard", TuningType.Standard },
-        //        { "Drop D", TuningType.DropD },
-        //        { "Semitone deeper", TuningType.SemiToneDeeper }
-        //    };
-
-        private Dictionary<string, Instrument> dicInstruments = new Dictionary<string, Instrument>()
+        private readonly Dictionary<string, Instrument> _dicInstruments = new Dictionary<string, Instrument>()
         {
             { "6 String Guitar", new Instrument(InstrumentType.Guitar, 6) },
             { "7 String Guitar", new Instrument(InstrumentType.Guitar, 7) },
@@ -429,37 +211,37 @@ namespace ScalesOnGuitar
             { "6 String Bass", new Instrument(InstrumentType.Bass, 6) }
         };
 
-        private Dictionary<string, ToneMode> dicToneMode = new Dictionary<string, ToneMode>()
+        private readonly Dictionary<string, ToneMode> _dicToneMode = new Dictionary<string, ToneMode>()
         {
             { "Major", ToneMode.Major },
             { "Minor", ToneMode.Minor }
         };
 
-        private string[] StartNotes = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H" };
+        private readonly string[] _startNotes = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H" };
 
-        private void enableAllTunes()
+        private void EnableAllTunes()
         {
             mTStandard.Visibility = Visibility.Visible;
             mTDropD.Visibility = Visibility.Visible;
         }
 
-        private void disableDropD()
+        private void DisableDropD()
         {
             mTDropD.Visibility = Visibility.Collapsed;
         }
 
-        private void setStandard()
+        private void SetStandard()
         {
             mTStandard.IsChecked = true;
         }
 
-        private void uncheckAllTunes()
+        private void UncheckAllTunes()
         {
             mTStandard.IsChecked = false;
             mTDropD.IsChecked = false;
         }
 
-        private void uncheckAllInstruments()
+        private void UncheckAllInstruments()
         {
             mIGuitarSix.IsChecked = false;
             mIGuitarSeven.IsChecked = false;
@@ -470,80 +252,74 @@ namespace ScalesOnGuitar
 
         private void mISixGuitar_Click(object sender, RoutedEventArgs e)
         {
-            uncheckAllInstruments();
-            enableAllTunes();
-            uncheckAllTunes();
+            UncheckAllInstruments();
+            EnableAllTunes();
+            UncheckAllTunes();
             mIGuitarSix.IsChecked = true;
-            setStandard();
-            //signLabel();
-            //signLabelTwo();
-            createFretBoard();
+            SetStandard();
+            CreateFretBoard();
         }
 
         private void mIGuitarSeven_Click(object sender, RoutedEventArgs e)
         {
-            uncheckAllInstruments();
-            enableAllTunes();
-            uncheckAllTunes();
+            UncheckAllInstruments();
+            EnableAllTunes();
+            UncheckAllTunes();
             mIGuitarSeven.IsChecked = true;
-            setStandard();
-            disableDropD();
-            //signLabel();
-            createFretBoard();
+            SetStandard();
+            DisableDropD();
+            CreateFretBoard();
         }
 
         private void mIBassFour_Click(object sender, RoutedEventArgs e)
         {
-            uncheckAllInstruments();
-            enableAllTunes();
-            uncheckAllTunes();
+            UncheckAllInstruments();
+            EnableAllTunes();
+            UncheckAllTunes();
             mIBassFour.IsChecked = true;
-            setStandard();
-            createFretBoard();
+            SetStandard();
+            CreateFretBoard();
         }
 
         private void mIBassFive_Click(object sender, RoutedEventArgs e)
         {
-            uncheckAllInstruments();
-            enableAllTunes();
-            uncheckAllTunes();
+            UncheckAllInstruments();
+            EnableAllTunes();
+            UncheckAllTunes();
             mIBassFive.IsChecked = true;
-            setStandard();
-            disableDropD();
-            createFretBoard();
+            SetStandard();
+            DisableDropD();
+            CreateFretBoard();
         }
 
         private void mIBassSix_Click(object sender, RoutedEventArgs e)
         {
-            uncheckAllInstruments();
-            enableAllTunes();
-            uncheckAllTunes();
+            UncheckAllInstruments();
+            EnableAllTunes();
+            UncheckAllTunes();
             mIBassSix.IsChecked = true;
-            setStandard();
-            disableDropD();
-            createFretBoard();
+            SetStandard();
+            DisableDropD();
+            CreateFretBoard();
         }
 
         private void mTStandard_Click(object sender, RoutedEventArgs e)
         {
-            uncheckAllTunes();
+            UncheckAllTunes();
             mTStandard.IsChecked = true;
+            CreateFretBoard();
         }
 
         private void mTDropD_Click(object sender, RoutedEventArgs e)
         {
-            uncheckAllTunes();
+            UncheckAllTunes();
             mTDropD.IsChecked = true;
-        }
-
-        private void mIGuitarSix_Checked(object sender, RoutedEventArgs e)
-        {
-
+            CreateFretBoard();
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            createFretBoard();
+            CreateFretBoard();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace ScalesOnGuitar
 
     public static class Tuning
     {
-        static Dictionary<string, TuningType> _dicTunings = new Dictionary<string, TuningType>()
+        static readonly Dictionary<string, TuningType> DicTunings = new Dictionary<string, TuningType>()
             {
                 { "Standard", TuningType.Standard },
                 { "Drop D", TuningType.DropD },
@@ -24,14 +24,14 @@ namespace ScalesOnGuitar
 
         public static string GetDicTuningsKey(int index)
         {
-            string[] keys = _dicTunings.Keys.ToArray();
+            string[] keys = DicTunings.Keys.ToArray();
             return keys[index];
         }
 
         public static TuningType GetDicTuningsValue(string key)
         {
             TuningType result;
-            _dicTunings.TryGetValue(key, out result);
+            DicTunings.TryGetValue(key, out result);
             return result;
         }
 

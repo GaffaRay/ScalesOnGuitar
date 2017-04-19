@@ -37,20 +37,19 @@ namespace ScalesOnGuitar
             
         //new Dictionary<ToneMode, List<int>>(); //{ { ToneMode.Major, new int[] { 0, 2, 4, 5, 7, 9, 11 } }; 
 
-        List<int> interimsMode;
+        List<int> _interimsMode;
 
         public void GenerateScale(ToneMode tonemode)
         {
-            interimsMode = ScaleModes[tonemode];
+            _interimsMode = ScaleModes[tonemode];
 
             int indexOfFirstNote = Array.IndexOf(allNotes, baseNote);
-            int indexOfNote;
 
-            for (int i = 0; i < interimsMode.Count; i++)
+            for (int i = 0; i < _interimsMode.Count; i++)
             {
-                indexOfNote = indexOfFirstNote + interimsMode[i] >= allNotes.Length 
-                              ? indexOfFirstNote + interimsMode[i] - allNotes.Length 
-                              : indexOfFirstNote + interimsMode[i];
+                var indexOfNote = indexOfFirstNote + _interimsMode[i] >= allNotes.Length 
+                    ? indexOfFirstNote + _interimsMode[i] - allNotes.Length 
+                    : indexOfFirstNote + _interimsMode[i];
 
                 wantedScale.Add(allNotes[indexOfNote]);
             }

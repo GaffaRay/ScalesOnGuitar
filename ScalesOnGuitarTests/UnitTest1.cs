@@ -12,7 +12,7 @@ namespace ScalesOnGuitarTests
         public void TestScale1()
         {
             // Arrange
-            Scale s = new Scale("C", ToneMode.Major);
+            var s = new Scale("C", ToneMode.Major);
 
             // Act
             //s.GenerateScale(ToneMode.Major);
