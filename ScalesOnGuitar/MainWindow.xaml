@@ -31,8 +31,8 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <ComboBox x:Name="CBToneMode" HorizontalAlignment="Left" Margin="114,44,0,0" VerticalAlignment="Top" Width="80" Grid.Row="2" SelectedIndex="0"/>
-        <Button x:Name="button" HorizontalAlignment="Left" Margin="354,44,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" Height="22" Click="button_Click" Content="Generate"/>
-        <ComboBox x:Name="CBBaseNote" HorizontalAlignment="Left" Margin="32,44,0,0" Grid.Row="2" VerticalAlignment="Top" Width="50" SelectedIndex="0"/>
+        <ComboBox x:Name="CBToneMode" HorizontalAlignment="Left" Margin="32,37,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" SelectedIndex="0"/>
+        <Button x:Name="button" HorizontalAlignment="Left" Margin="32,64,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" Height="22" Click="button_Click" Content="Generate"/>
+        <ComboBox x:Name="CBBaseNote" HorizontalAlignment="Left" Margin="32,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" SelectedIndex="0"/>
     </Grid>
 </Window>

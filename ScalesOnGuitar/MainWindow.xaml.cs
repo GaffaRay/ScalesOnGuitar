@@ -179,6 +179,7 @@ namespace ScalesOnGuitar
                         b.Content = j;
                     }
 
+
                     b.VerticalAlignment = VerticalAlignment.Bottom;
                     b.HorizontalAlignment = HorizontalAlignment.Left;
 
